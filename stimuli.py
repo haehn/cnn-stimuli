@@ -9,11 +9,41 @@ class Figure5:
     RANGE = (1, 90) #sizes of angles generated
     POS_RANGE = (20, 80) #position range
     AUTO_SPOT_SIZE = 3 #how big automatic spot is in pixels
-    LENGTH_RANGE = (0.4, 0.9) #how much of length 1 can others be?
+    LENGTH_MAX = 20
+    ANGLE_LINE_LENGTH = 10
+    VOLUME_SIDE_MAX = 20
     CURV_WIDTH = 30 #auto curvature width
+    WIGGLE = 10
 
     @staticmethod
-    def position_non_aligned_scale(diff=None, spot_size=AUTO_SPOT_SIZE, varspot=False, preset=None):
+    def flags(stimulus, flags): #flag 1: diagonal vs random, flag 2: x wiggle, flag 3: which is largest?
+        sparse_ = [] #sparse of all stimuli
+        label_ = [] #label of all stimuli
+        X = 30
+        XR = X
+        if flags[1]:
+            XR = X + np.random.randint((-1)*Figure5.WIGGLE, Figure5.WIGGLE)
+        if flags[0]:
+            Y = 20
+        else:
+            Y = np.random.randint(Figure5.POS_RANGE[0], Figure5.POS_RANGE[1])
+        temp = stimulus(X=XR, Y=Y, recur=True)
+        img = temp[1]
+        for i in range(3):
+            X = XR = X + 30
+            if flags[1]:
+                XR = X + np.random.randint((-1)*Figure5.WIGGLE, Figure5.WIGGLE)
+            if flags[0]:
+                Y = Y + 20
+            else:
+                Y = np.random.randint(Figure5.POS_RANGE[0], Figure5.POS_RANGE[1])
+            temp = stimulus(X=XR, Y=Y, preset=img, recur=True)
+            sparse_.append(temp[0])
+            label_.append(temp[2])
+        return sparse_, img, label_
+    
+    @staticmethod
+    def position_non_aligned_scale(diff=None, varspot=False, preset=None):
         if preset is not None:
             img = preset
         else:
@@ -27,6 +57,8 @@ class Figure5:
         if varspot:
             sizes = [1, 3, 5, 7, 9, 11]
             spot_size = np.random.choice(sizes)
+        else:
+            spot_size = Figure5.AUTO_SPOT_SIZE
 
         X = len(img[0]) / 2
         Y = np.random.randint(Figure5.POS_RANGE[0], Figure5.POS_RANGE[1])
@@ -41,35 +73,38 @@ class Figure5:
         return sparse, img, label, diff
 
     @staticmethod
-    def multiple_pnas(diff=None, num=4, spot_size=AUTO_SPOT_SIZE, varspot=False):
+    def multiple_pnas(diff=None, num=4, varspot=False):
         label_ = []
         sparse_ = []
         img = None
-        temp = Figure5.position_non_aligned_scale(diff, spot_size, varspot)
+        temp = Figure5.position_non_aligned_scale(diff, varspot)
         img = temp[1]
         label_.append(temp[2])
         sparse_.append(temp[0])
         diff = temp[3]
         for i in range(num-1):
-            temp = Figure5.position_non_aligned_scale(diff, spot_size, varspot, preset=img)
+            temp = Figure5.position_non_aligned_scale(diff, varspot, preset=img)
             label_.append(temp[2])
             sparse_.append(temp[0])
         return sparse_, img, label_
     
     @staticmethod
-    def position_common_scale(spot_size=AUTO_SPOT_SIZE, varspot=False, preset=None):
-        return Figure5.position_non_aligned_scale(diff=0, spot_size=spot_size, varspot=varspot, preset=preset)
+    def position_common_scale(varspot=False, preset=None):
+        return Figure5.position_non_aligned_scale(diff=0, varspot=varspot, preset=preset)
     
     @staticmethod
-    def multiple_pcs(num=4, spot_size=AUTO_SPOT_SIZE, varspot=False):
-        return Figure5.multiple_pnas(diff=0, num=num, spot_size=spot_size, varspot=varspot)
+    def multiple_pcs(num=4, varspot=False):
+        return Figure5.multiple_pnas(diff=0, num=num, varspot=varspot)
     
     @staticmethod
-    def angle(X, Y, preset=None, size=SIZE, L=10) :
+    def angle(flags=[False, False, False], X=0, Y=0, preset=None, recur=False) :
+        if not recur:
+            return Figure5.flags(Figure5.angle, flags)
         if preset is not None:
             img = preset
         else:
-            img = np.zeros(size)
+            img = np.zeros(Figure5.SIZE)
+        L = Figure5.ANGLE_LINE_LENGTH
         startangle = np.random.randint(0, 360)
         ANGLE = np.random.randint(Figure5.RANGE[0], Figure5.RANGE[1])
         t2 = startangle * (math.pi/180)
@@ -83,24 +118,29 @@ class Figure5:
         return sparse, img, ANGLE
 
     @staticmethod
-    def length(X, Y, preset=None, size=SIZE, OL=20):
-        L = OL
+    def length(flags=[False, False, False], X=0, Y=0, preset=None, recur=False):
+        if not recur:
+            return Figure5.flags(Figure5.length, flags)
+        L = Figure5.LENGTH_MAX
         if preset is not None:
             img = preset
-            L = OL * np.random.uniform(Figure5.LENGTH_RANGE[0], Figure5.LENGTH_RANGE[1])
+            L = np.random.randint(1, Figure5.LENGTH_MAX)
         else:
-            img = np.zeros(size)
+            img = np.zeros(Figure5.SIZE)
         half_l = int(L * 0.5)
         img[Y-half_l:Y+half_l, X] = 1
         sparse = [Y, X, L]
         return sparse, img, L
 
     @staticmethod
-    def direction(X, Y, preset=None, size=SIZE, L=10):
+    def direction(flags=[False, False, False], X=0, Y=0, preset=None, recur=False):
+        if not recur:
+            return Figure5.flags(Figure5.direction, flags)
         if preset is not None:
             img = preset
         else:
-            img = np.zeros(size)
+            img = np.zeros(Figure5.SIZE)
+        L = Figure5.ANGLE_LINE_LENGTH
         angle = np.random.randint(0, 360)
         radangle = angle * np.pi / 180
         r, c = skimage.draw.line(Y, X, Y+int(L*np.sin(radangle)), X+int(L*np.cos(radangle)))
@@ -110,11 +150,13 @@ class Figure5:
         return sparse, img, angle
 
     @staticmethod
-    def area(X, Y, preset=None, size=SIZE):
+    def area(flags=[False, False, False], X=0, Y=0, preset=None, recur=False):
+        if not recur:
+            return Figure5.flags(Figure5.area, flags)
         if preset is not None:
             img = preset
         else:
-            img = np.zeros(size)
+            img = np.zeros(Figure5.SIZE)
         DOF = 19
         radius = np.random.randint(1, DOF+1)
         r, c = skimage.draw.ellipse_perimeter(Y, X, radius, radius)
@@ -124,12 +166,14 @@ class Figure5:
         return sparse, img, label
 
     @staticmethod
-    def volume(X, Y, preset=None, size=SIZE, autosize=20):
+    def volume(flags=[False, False, False], X=0, Y=0, preset=None, recur=False):
+        if not recur:
+            return Figure5.flags(Figure5.volume, flags)
         if preset is not None:
             img = preset
         else:
-            img = np.zeros(size)
-        depth = np.random.randint(1, autosize+1)
+            img = np.zeros(Figure5.SIZE)
+        depth = np.random.randint(1, Figure5.VOLUME_SIDE_MAX)
 
         def obliqueProjection(point):
             angle = -45.
@@ -175,11 +219,13 @@ class Figure5:
         
 
     @staticmethod
-    def curvature(X, Y, preset=None, size=SIZE, varwidth=False):
+    def curvature(flags=[False, False, False], X=0, Y=0, preset=None, recur=False, varwidth=False):
+        if not recur:
+            return Figure5.flags(Figure5.curvature, flags)
         if preset is not None:
             img = preset
         else:
-            img = np.zeros(size)
+            img = np.zeros(Figure5.SIZE)
         DOF = 30
         depth = np.random.randint(1, DOF+1)
         width = Figure5.CURV_WIDTH
@@ -203,18 +249,3 @@ class Figure5:
         label = np.round(curvature, 3)
         return sparse, img, label
 
-    @staticmethod
-    def diagonal(stimulus): #draws stimulus 4x in a diagonal
-        sparse_ = [] #sparse of all stimuli
-        label_ = [] #label of all stimuli
-        X = 30
-        Y = 20
-        temp = stimulus(X, Y, size=Figure5.SIZE)
-        img = temp[1]
-        for i in range(3):
-            X = X + 30
-            Y = Y + 20
-            temp = stimulus(X, Y, preset=img)
-            sparse_.append(temp[0])
-            label_.append(temp[2])
-        return sparse_, img, label_
