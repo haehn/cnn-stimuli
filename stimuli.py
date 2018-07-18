@@ -5,9 +5,8 @@ import skimage.draw
 class Figure5:
 
     #SORRY ABOUT PARAMETERS I WILL ADD THEM LATER!
-    SIZE = (100, 100)
-    BIG_SIZE = (100, 150) #SY, SX
-    RANGE = (10, 80) #sizes of angles generated
+    SIZE = (100, 150)
+    RANGE = (1, 90) #sizes of angles generated
     POS_RANGE = (20, 80) #position range
     AUTO_SPOT_SIZE = 3 #how big automatic spot is in pixels
     LENGTH_RANGE = (0.4, 0.9) #how much of length 1 can others be?
@@ -66,7 +65,7 @@ class Figure5:
         return Figure5.multiple_pnas(diff=0, num=num, spot_size=spot_size, varspot=varspot)
     
     @staticmethod
-    def angle(X, Y, preset=None, size=BIG_SIZE, L=10) :
+    def angle(X, Y, preset=None, size=SIZE, L=10) :
         if preset is not None:
             img = preset
         else:
@@ -84,7 +83,7 @@ class Figure5:
         return sparse, img, ANGLE
 
     @staticmethod
-    def length(X, Y, preset=None, size=BIG_SIZE, OL=20):
+    def length(X, Y, preset=None, size=SIZE, OL=20):
         L = OL
         if preset is not None:
             img = preset
@@ -97,7 +96,7 @@ class Figure5:
         return sparse, img, L
 
     @staticmethod
-    def direction(X, Y, preset=None, size=BIG_SIZE, L=10):
+    def direction(X, Y, preset=None, size=SIZE, L=10):
         if preset is not None:
             img = preset
         else:
@@ -111,7 +110,7 @@ class Figure5:
         return sparse, img, angle
 
     @staticmethod
-    def area(X, Y, preset=None, size=BIG_SIZE):
+    def area(X, Y, preset=None, size=SIZE):
         if preset is not None:
             img = preset
         else:
@@ -125,7 +124,7 @@ class Figure5:
         return sparse, img, label
 
     @staticmethod
-    def volume(X, Y, preset=None, size=BIG_SIZE, autosize=20):
+    def volume(X, Y, preset=None, size=SIZE, autosize=20):
         if preset is not None:
             img = preset
         else:
@@ -176,7 +175,7 @@ class Figure5:
         
 
     @staticmethod
-    def curvature(X, Y, preset=None, size=BIG_SIZE, varwidth=False):
+    def curvature(X, Y, preset=None, size=SIZE, varwidth=False):
         if preset is not None:
             img = preset
         else:
@@ -210,7 +209,7 @@ class Figure5:
         label_ = [] #label of all stimuli
         X = 30
         Y = 20
-        temp = stimulus(X, Y, size=Figure5.BIG_SIZE)
+        temp = stimulus(X, Y, size=Figure5.SIZE)
         img = temp[1]
         for i in range(3):
             X = X + 30
