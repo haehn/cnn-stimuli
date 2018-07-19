@@ -9,9 +9,10 @@ class Figure5:
     POS_RANGE = (20, 80) #position range
     AUTO_SPOT_SIZE = 3 #how big automatic spot is in pixels
     LENGTH_MAX = 34 #how long a line can be for length
+    LENGTH_MIN = 5 #lines disappear when they're too short
     ANGLE_LINE_LENGTH = 12 #how long the angle lines are
     AREA_DOF = 12 #maximum circle radius
-    VOLUME_SIDE_MAX = 16
+    VOLUME_SIDE_MAX = 14
     CURV_DOF = 34
     CURV_WIDTH = 22 #auto curvature width
     WIGGLE = 5 #How many pixels of x "wiggling" it can do
@@ -22,7 +23,7 @@ class Figure5:
         if stimulus is Figure5.angle:
             R = Figure5.RANGE[1]
         elif stimulus is Figure5.length:
-            R = Figure5.LENGTH_MAX
+            R = Figure5.LENGTH_MAX - Figure5.LENGTH_MIN + 1
         elif stimulus is Figure5.direction:
             R = 360
         elif stimulus is Figure5.area:
@@ -58,6 +59,8 @@ class Figure5:
             sizes[i] = np.random.randint(1, R)
             if stimulus is Figure5.position_non_aligned_scale or stimulus is Figure5.position_common_scale:
                 sizes[i] = sizes[i] + Figure5.POS_RANGE[0] - 1 #Fixes 1-61 to become 20-80
+            elif stimulus is Figure5.length:
+                sizes[i] += Figure5.LENGTH_MIN - 1
         if flags[2]:
             L = sizes[0]
             SL = 0
@@ -123,7 +126,7 @@ class Figure5:
             img = preset_img
         else:
             img = np.zeros(Figure5.SIZE)
-            ORIGIN = 10 #where the line is
+            ORIGIN = 7 #where the line is
             if diff is not None:
                 img[Figure5.POS_RANGE[0]+diff:Figure5.POS_RANGE[1]+diff, ORIGIN] = 1
             else:
