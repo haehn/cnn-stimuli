@@ -4,48 +4,123 @@ import skimage.draw
 
 class Figure5:
 
-    #SORRY ABOUT PARAMETERS I WILL ADD THEM LATER!
     SIZE = (100, 150)
     RANGE = (1, 90) #sizes of angles generated
     POS_RANGE = (20, 80) #position range
     AUTO_SPOT_SIZE = 3 #how big automatic spot is in pixels
-    LENGTH_MAX = 20
-    ANGLE_LINE_LENGTH = 10
-    VOLUME_SIDE_MAX = 20
-    CURV_WIDTH = 30 #auto curvature width
-    WIGGLE = 10
+    LENGTH_MAX = 34 #how long a line can be for length
+    ANGLE_LINE_LENGTH = 12 #how long the angle lines are
+    AREA_DOF = 12 #maximum circle radius
+    VOLUME_SIDE_MAX = 16
+    CURV_DOF = 34
+    CURV_WIDTH = 22 #auto curvature width
+    WIGGLE = 5 #How many pixels of x "wiggling" it can do
 
     @staticmethod
+    def calc_ranges(stimulus): #Calculates what the range of values is that "flags" supplies as a preset to other methods.
+        R = 0 #Highest number that can be generated (range: 1-R)
+        if stimulus is Figure5.angle:
+            R = Figure5.RANGE[1]
+        elif stimulus is Figure5.length:
+            R = Figure5.LENGTH_MAX
+        elif stimulus is Figure5.direction:
+            R = 360
+        elif stimulus is Figure5.area:
+            R = Figure5.AREA_DOF
+        elif stimulus is Figure5.volume:
+            R = Figure5.VOLUME_SIDE_MAX
+        elif stimulus is Figure5.curvature:
+            R = Figure5.CURV_DOF
+        elif stimulus is Figure5.position_non_aligned_scale or stimulus is Figure5.position_common_scale:
+            R = Figure5.POS_RANGE[1] - Figure5.POS_RANGE[0] + 1
+        return R 
+
+    @staticmethod #Driver method
     def flags(stimulus, flags): #flag 1: diagonal vs random, flag 2: x wiggle, flag 3: which is largest?
         sparse_ = [] #sparse of all stimuli
         label_ = [] #label of all stimuli
-        X = 30
+        parameters = 1 #number of permutations for all 4 combined
+        X = 18
         XR = X
         if flags[1]:
             XR = X + np.random.randint((-1)*Figure5.WIGGLE, Figure5.WIGGLE)
+            parameters *= (Figure5.WIGGLE*2+1)
         if flags[0]:
             Y = 20
-        else:
+        elif stimulus is not Figure5.position_common_scale and stimulus is not Figure5.position_non_aligned_scale:
             Y = np.random.randint(Figure5.POS_RANGE[0], Figure5.POS_RANGE[1])
-        temp = stimulus(X=XR, Y=Y, recur=True)
+            parameters *= (Figure5.POS_RANGE[1] - Figure5.POS_RANGE[0] + 1)
+
+        R = Figure5.calc_ranges(stimulus)
+        parameters *= (R**4)
+        sizes = [0] * 4
+        for i in range(len(sizes)):
+            sizes[i] = np.random.randint(1, R)
+            if stimulus is Figure5.position_non_aligned_scale or stimulus is Figure5.position_common_scale:
+                sizes[i] = sizes[i] + Figure5.POS_RANGE[0] - 1 #Fixes 1-61 to become 20-80
+        if flags[2]:
+            L = sizes[0]
+            SL = 0
+            for i in range(1, len(sizes)):
+                if sizes[i] > L:
+                    L = sizes[i]
+                    SL = i
+            if SL > 0:
+                sizes[0], sizes[SL] = sizes[SL], sizes[0]
+        elif stimulus is not Figure5.position_common_scale and stimulus is not Figure5.position_non_aligned_scale:
+            parameters *= 4
+
+        if stimulus is Figure5.position_non_aligned_scale:
+            diff = np.random.randint(-9, 11)
+            parameters *= 21
+            temp = stimulus(X=XR, preset=sizes[0], recur=True, diff=diff)
+        elif stimulus is Figure5.position_common_scale:
+            temp = stimulus(X=XR, preset=sizes[0], recur=True)
+        else:
+            temp = stimulus(X=XR, Y=Y, preset=sizes[0], recur=True)
         img = temp[1]
-        for i in range(3):
-            X = XR = X + 30
+        sparse_.append(temp[0])
+        label_.append(temp[2])
+        if len(temp) > 3:
+            parameters *= temp[3]
+
+        for i in range(1, 4):
+            X = XR = X + 38
             if flags[1]:
                 XR = X + np.random.randint((-1)*Figure5.WIGGLE, Figure5.WIGGLE)
+                parameters *= (Figure5.WIGGLE*2+1)
             if flags[0]:
                 Y = Y + 20
-            else:
+            elif stimulus is not Figure5.position_common_scale and stimulus is not Figure5.position_non_aligned_scale:
                 Y = np.random.randint(Figure5.POS_RANGE[0], Figure5.POS_RANGE[1])
-            temp = stimulus(X=XR, Y=Y, preset=img, recur=True)
+                parameters *= (Figure5.POS_RANGE[1] - Figure5.POS_RANGE[0] + 1)
+            if stimulus is Figure5.position_non_aligned_scale:
+                temp = stimulus(X=XR, preset=sizes[i], preset_img=img, recur=True, diff=diff)
+            elif stimulus is Figure5.position_common_scale:
+                temp = stimulus(X=XR, preset=sizes[i], preset_img=img, recur=True)
+            else:
+                temp = stimulus(X=XR, Y=Y, preset=sizes[i], preset_img=img, recur=True)
             sparse_.append(temp[0])
             label_.append(temp[2])
-        return sparse_, img, label_
+            if len(temp) > 3:
+                parameters *= temp[3]
+        return sparse_, img, label_, parameters
     
+
+    #FOR ALL STIMULUS METHODS
+    #flags = the flags passed by the user (explanation in flags method)
+    #X, Y = position of stimulus on image
+    #preset = whatever is being randomized (direction, length, radius, etc)
+    #preset_img = when it's the 2nd-4th stimulus being added to an existing image
+    #recur = is it the user's call (false) or is it the flags method calling it (true)
+    #Use of variable "recur" allows me to use methods as their own helper methods
+
     @staticmethod
-    def position_non_aligned_scale(diff=None, varspot=False, preset=None):
-        if preset is not None:
-            img = preset
+    def position_non_aligned_scale(flags=[False, False, False], X=0, preset=None, preset_img=None, recur=False, diff=None, varspot=False):
+        if not recur:
+            return Figure5.flags(Figure5.position_non_aligned_scale, flags)
+        if preset_img is not None:
+            img = preset_img
         else:
             img = np.zeros(Figure5.SIZE)
             ORIGIN = 10 #where the line is
@@ -54,14 +129,17 @@ class Figure5:
             else:
                 diff = np.random.randint(-9, 11)
                 img[Figure5.POS_RANGE[0]+diff:Figure5.POS_RANGE[1]+diff, ORIGIN] = 1
+        parameters = 1
         if varspot:
             sizes = [1, 3, 5, 7, 9, 11]
             spot_size = np.random.choice(sizes)
+            parameters *= len(sizes)
         else:
             spot_size = Figure5.AUTO_SPOT_SIZE
-
-        X = len(img[0]) / 2
-        Y = np.random.randint(Figure5.POS_RANGE[0], Figure5.POS_RANGE[1])
+        if preset is None:
+            Y = np.random.randint(Figure5.POS_RANGE[0]+diff, Figure5.POS_RANGE[1]+diff)
+        else:
+            Y = preset
         Y = Y + diff
         label = Y - Figure5.POS_RANGE[0] - diff
         
@@ -70,43 +148,29 @@ class Figure5:
 
         sparse = [Y, X, spot_size]
 
-        return sparse, img, label, diff
+        return sparse, img, label, parameters
 
     @staticmethod
-    def multiple_pnas(diff=None, num=4, varspot=False):
-        label_ = []
-        sparse_ = []
-        img = None
-        temp = Figure5.position_non_aligned_scale(diff, varspot)
-        img = temp[1]
-        label_.append(temp[2])
-        sparse_.append(temp[0])
-        diff = temp[3]
-        for i in range(num-1):
-            temp = Figure5.position_non_aligned_scale(diff, varspot, preset=img)
-            label_.append(temp[2])
-            sparse_.append(temp[0])
-        return sparse_, img, label_
+    def position_common_scale(flags=[False, False, False], X=0, preset=None, preset_img=None, recur=False, varspot=False):
+        if not recur:
+            return Figure5.flags(Figure5.position_common_scale, flags)
+        return Figure5.position_non_aligned_scale(X=X, preset=preset, preset_img=preset_img, varspot=varspot, recur=recur, diff=0)
     
     @staticmethod
-    def position_common_scale(varspot=False, preset=None):
-        return Figure5.position_non_aligned_scale(diff=0, varspot=varspot, preset=preset)
-    
-    @staticmethod
-    def multiple_pcs(num=4, varspot=False):
-        return Figure5.multiple_pnas(diff=0, num=num, varspot=varspot)
-    
-    @staticmethod
-    def angle(flags=[False, False, False], X=0, Y=0, preset=None, recur=False) :
+    def angle(flags=[False, False, False], X=0, Y=0, preset=None, preset_img=None, recur=False) :
         if not recur:
             return Figure5.flags(Figure5.angle, flags)
-        if preset is not None:
-            img = preset
+        if preset_img is not None:
+            img = preset_img
         else:
             img = np.zeros(Figure5.SIZE)
         L = Figure5.ANGLE_LINE_LENGTH
-        startangle = np.random.randint(0, 360)
-        ANGLE = np.random.randint(Figure5.RANGE[0], Figure5.RANGE[1])
+        startangle = np.random.randint(0, 359)
+        parameters = 360
+        if preset is None:
+            ANGLE = np.random.randint(Figure5.RANGE[0], Figure5.RANGE[1])
+        else:
+            ANGLE = preset
         t2 = startangle * (math.pi/180)
         diff2 = ANGLE * (math.pi/180)
         r, c = skimage.draw.line(Y, X, Y+(int)(L*np.sin(t2)), X+(int)(L*np.cos(t2)))
@@ -115,33 +179,38 @@ class Figure5:
         img[r, c] = 1
         img[r2, c2] = 1
         sparse = [Y, X, ANGLE, startangle]
-        return sparse, img, ANGLE
+        return sparse, img, ANGLE, parameters
 
     @staticmethod
-    def length(flags=[False, False, False], X=0, Y=0, preset=None, recur=False):
+    def length(flags=[False, False, False], X=0, Y=0, preset=None, preset_img=None, recur=False):
         if not recur:
             return Figure5.flags(Figure5.length, flags)
-        L = Figure5.LENGTH_MAX
-        if preset is not None:
-            img = preset
-            L = np.random.randint(1, Figure5.LENGTH_MAX)
+        if preset_img is not None:
+            img = preset_img
         else:
             img = np.zeros(Figure5.SIZE)
+        if preset is None:
+            L = np.random.randint(1, Figure5.LENGTH_MAX)
+        else:
+            L = preset
         half_l = int(L * 0.5)
         img[Y-half_l:Y+half_l, X] = 1
         sparse = [Y, X, L]
         return sparse, img, L
 
     @staticmethod
-    def direction(flags=[False, False, False], X=0, Y=0, preset=None, recur=False):
+    def direction(flags=[False, False, False], X=0, Y=0, preset=None, preset_img=None, recur=False):
         if not recur:
             return Figure5.flags(Figure5.direction, flags)
-        if preset is not None:
-            img = preset
+        if preset_img is not None:
+            img = preset_img
         else:
             img = np.zeros(Figure5.SIZE)
         L = Figure5.ANGLE_LINE_LENGTH
-        angle = np.random.randint(0, 360)
+        if preset is None:
+            angle = np.random.randint(0, 360)
+        else:
+            angle = preset
         radangle = angle * np.pi / 180
         r, c = skimage.draw.line(Y, X, Y+int(L*np.sin(radangle)), X+int(L*np.cos(radangle)))
         img[r,c] = 1
@@ -150,15 +219,17 @@ class Figure5:
         return sparse, img, angle
 
     @staticmethod
-    def area(flags=[False, False, False], X=0, Y=0, preset=None, recur=False):
+    def area(flags=[False, False, False], X=0, Y=0, preset=None, preset_img=None, recur=False):
         if not recur:
             return Figure5.flags(Figure5.area, flags)
-        if preset is not None:
-            img = preset
+        if preset_img is not None:
+            img = preset_img
         else:
             img = np.zeros(Figure5.SIZE)
-        DOF = 19
-        radius = np.random.randint(1, DOF+1)
+        if preset is None:
+            radius = np.random.randint(1, Figure5.AREA_DOF+1)
+        else:
+            radius = preset
         r, c = skimage.draw.ellipse_perimeter(Y, X, radius, radius)
         img[r, c] = 1
         sparse = [Y, X, radius]
@@ -166,14 +237,18 @@ class Figure5:
         return sparse, img, label
 
     @staticmethod
-    def volume(flags=[False, False, False], X=0, Y=0, preset=None, recur=False):
+    def volume(flags=[False, False, False], X=0, Y=0, preset=None, preset_img=None, recur=False):
         if not recur:
             return Figure5.flags(Figure5.volume, flags)
-        if preset is not None:
-            img = preset
+        if preset_img is not None:
+            img = preset_img
         else:
             img = np.zeros(Figure5.SIZE)
-        depth = np.random.randint(1, Figure5.VOLUME_SIDE_MAX)
+
+        if preset is None:
+            depth = np.random.randint(1, Figure5.VOLUME_SIDE_MAX)
+        else:
+            depth = preset
 
         def obliqueProjection(point):
             angle = -45.
@@ -219,19 +294,23 @@ class Figure5:
         
 
     @staticmethod
-    def curvature(flags=[False, False, False], X=0, Y=0, preset=None, recur=False, varwidth=False):
+    def curvature(flags=[False, False, False], X=0, Y=0, preset=None, preset_img=None, recur=False, varwidth=False):
         if not recur:
             return Figure5.flags(Figure5.curvature, flags)
-        if preset is not None:
-            img = preset
+        if preset_img is not None:
+            img = preset_img
         else:
             img = np.zeros(Figure5.SIZE)
-        DOF = 30
-        depth = np.random.randint(1, DOF+1)
+        if preset is None:
+            depth = np.random.randint(1, Figure5.CURV_DOF+1)
+        else:
+            depth = preset
         width = Figure5.CURV_WIDTH
-        if varwidth:
-            width = np.random.randint(1, width/2)*2
+        parameters = 1
         halfwidth = int(width/2)
+        if varwidth:
+            width = np.random.randint(1, halfwidth)*2
+            parameters = halfwidth
         start = (Y, X-halfwidth)
         mid = (Y-depth, X)
         end = (Y, X+halfwidth)
@@ -247,5 +326,5 @@ class Figure5:
         dBt2_y = 2*(end[0] - 2*mid[0] + start[0])
         curvature = np.abs((dBt_x*dBt2_y - dBt_y*dBt2_x) / ((dBt_x**2 + dBt_y**2)**(3/2.)))
         label = np.round(curvature, 3)
-        return sparse, img, label
+        return sparse, img, label, parameters
 
