@@ -70,7 +70,7 @@ class Figure5:
                     SL = i
             if SL > 0:
                 sizes[0], sizes[SL] = sizes[SL], sizes[0]
-        elif stimulus is not Figure5.position_common_scale and stimulus is not Figure5.position_non_aligned_scale:
+        else:
             parameters *= 4
 
         if stimulus is Figure5.position_non_aligned_scale:
