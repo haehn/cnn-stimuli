@@ -305,7 +305,7 @@ class Figure5:
         else:
             img = np.zeros(Figure5.SIZE)
         if preset is None:
-            depth = np.random.randint(1, Figure5.CURV_DOF+1)
+            depth = np.random.randint(1, Figure5.CURV_DOF)
         else:
             depth = preset
         width = Figure5.CURV_WIDTH
