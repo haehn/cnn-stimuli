@@ -36,6 +36,23 @@ class Figure5:
             R = Figure5.POS_RANGE[1] - Figure5.POS_RANGE[0] + 1
         return R 
 
+    @staticmethod
+    def _min(stimulus):
+        if stimulus is Figure5.length:
+            return Figure5.LENGTH_MIN
+        elif stimulus is Figure5.position_non_aligned_scale or stimulus is Figure5.position_common_scale:
+            return Figure5.POS_RANGE[0]
+        return 1
+
+    @staticmethod
+    def _max(stimulus):
+        if stimulus is Figure5.length:
+            return Figure5.LENGTH_MAX
+        elif stimulus is Figure5.position_non_aligned_scale or stimulus is Figure5.position_common_scale:
+            return Figure5.POS_RANGE[1]
+        return calc_ranges(stimulus)
+
+
     @staticmethod #Driver method
     def flags(stimulus, flags): #flag 1: diagonal vs random, flag 2: x wiggle, flag 3: which is largest?
         sparse_ = [] #sparse of all stimuli
