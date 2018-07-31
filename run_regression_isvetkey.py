@@ -12,6 +12,7 @@ from stimuli.Figure5 import *
 EXPERIMENT = sys.argv[1]
 DATASET = int(sys.argv[2]) #true flags (encoded in binary)
 CLASSIFIER = sys.argv[3]
+NOISE = sys.argv[4]
 
 print 'Running', EXPERIMENT, 'with flags', DATASET, 'with', CLASSIFIER
 
@@ -32,7 +33,11 @@ for f in range(len(FLAGS)):
 	DST = DST // 2
 
 SUFFIX = '.'
-#add noise later
+if NOISE = 'True':
+	NOISE = True
+	SUFFIX = '_noise.'
+else:
+	NOISE = False
 
 PREFIX = '' #what directory am I in?
 RESULTS_DIR = PREFIX + 'RESULTS/'
@@ -54,10 +59,12 @@ if os.path.exists(STATSFILE) and os.path.exists(MODELFILE):
 	print 'we already did this one :\'('
 	sys.exit(0)
 
+#
+#
+# actual data stuff
+#
+#
 
-#actual data s**t
-#
-#
 train_target = 60000
 val_target = 20000
 test_target = 20000
@@ -90,26 +97,35 @@ while train_counter < train_target or val_counter < val_target or test_counter <
 	pot = np.random.choice(3)
 
 	if pot == 0 and train_counter < train_target:
-		if label in y_val or label in y_test:
+		#sort it to check whether same angles are in a different order somewhere
+		if np.sort(label) in np.sort(y_val, axis=1) or np.sort(label) in np.sort(y_test, axis=1):
 			continue
-
-		#add noise later
+		#add noise?
+		if NOISE:
+			image += np.random.uniform(0, 0.05, (100, 150))
 
 		X_train[train_counter] = image
 		y_train[train_counter] = label
 		train_counter += 1
 
+	#repeat process with other 2 sets of data
 	elif pot == 1 and val_counter < val_target:
-		if label in y_train or label in y_test:
+		if np.sort(label) in np.sort(y_train, axis=1) or np.sort(label) in np.sort(y_test, axis=1):
 			continue
+
+		if NOISE:
+			image += np.random.uniform(0, 0.05, (100, 150))
 
 		X_val[val_counter] = image
 		y_val[val_counter] = label
 		val_counter += 1
 
 	elif pot == 2 and test_counter < test_target:
-		if label in y_train or label in y_val:
+		if np.sort(label) in np.sort(y_train, axis=1) or np.sort(label) in np.sort(y_val, axis=1):
 			continue
+
+		if NOISE:
+			image += np.random.uniform(0, 0.05, (100, 150))
 
 		X_test[test_counter] = image
 		y_test[test_counter] = label
@@ -150,14 +166,17 @@ X_test -= .5
 print 'memory usage', (X_train.nbytes + X_val.nbytes + X_test.nbytes + y_train.nbytes + y_val.nbytes + y_test.nbytes) / 1000000., 'MB'
 
 feature_time = 0
-if CLASSIFIER = 'VGG19':
+if CLASSIFIER = 'VGG19' or CLASSIFIER == 'XCEPTION':
 	X_train_3D = np.stack((X_train,)*3, -1)
   	X_val_3D = np.stack((X_val,)*3, -1)
   	X_test_3D = np.stack((X_test,)*3, -1)
 
   	#if this gives me some errors: transpose (0, 3, 1, 2) and put the 3 in front on the VGG19 thing
-
-  	feature_generator = keras.applications.VGG19(include_top=False, weights=None, input_shape=(100,150,3))
+  	if CLASSIFIER == 'VGG19':
+  		feature_generator = keras.applications.VGG19(include_top=False, weights=None, input_shape=(100,150,3))
+  	elif CLASSIFIER == 'XCEPTION':
+  		feature_generator = keras.applications.Xception(include_top=False, weights=None, input_shape=(100,150,3))
+  	
   	t0 = time.time()
   	X_train_3D_features = feature_generator.predict(X_train_3D, verbose=True)
  	X_val_3D_features = feature_generator.predict(X_val_3D, verbose=True)
