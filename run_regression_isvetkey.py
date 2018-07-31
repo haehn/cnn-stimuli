@@ -7,7 +7,7 @@ import numpy as np
 import os
 import sys
 import time
-from stimuli.Figure5 import *
+import stimuli as s
 
 EXPERIMENT = sys.argv[1]
 DATASET = int(sys.argv[2]) #true flags (encoded in binary)
@@ -69,8 +69,8 @@ train_target = 60000
 val_target = 20000
 test_target = 20000
 
-global_min = _min(DATATYPE)
-global_max = _max(DATATYPE)
+global_min = s.Figure5._min(DATATYPE)
+global_max = s.Figure5._max(DATATYPE)
 
 X_train = np.zeros((train_target, 100, 150), dtype=np.float32)
 y_train = np.zeros((train_target), dtype=float32)
