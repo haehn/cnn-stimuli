@@ -33,15 +33,15 @@ for f in range(len(FLAGS)):
 	DST = DST // 2
 
 SUFFIX = '.'
-if NOISE = 'True':
+if NOISE == 'True':
 	NOISE = True
 	SUFFIX = '_noise.'
 else:
 	NOISE = False
 
-PREFIX = '' #what directory am I in?
+PREFIX = '/n/home05/isvetkey/cnn-stimuli/'
 RESULTS_DIR = PREFIX + 'RESULTS/'
-OUTPUT_DIR = RESULTS_DIR + EXPERIMENT + '/' + str(DATASET) + '/' + CLASSIFIER + '/'
+OUTPUT_DIR = RESULTS_DIR + EXPERIMENT + '/' + str(DATASET) + '/' + CLASSIFIER
 if not os.path.exists(OUTPUT_DIR):
 	try:
 		os.makedirs(OUTPUT_DIR)
@@ -65,23 +65,23 @@ if os.path.exists(STATSFILE) and os.path.exists(MODELFILE):
 #
 #
 
-train_target = 60000
-val_target = 20000
-test_target = 20000
+train_target = 600
+val_target = 200
+test_target = 200
 
 global_min = s.Figure5._min(DATATYPE)
 global_max = s.Figure5._max(DATATYPE)
 
 X_train = np.zeros((train_target, 100, 150), dtype=np.float32)
-y_train = np.zeros((train_target), dtype=float32)
+y_train = np.zeros((train_target, 4), dtype=np.float32)
 train_counter = 0
 
 X_val = np.zeros((val_target, 100, 150), dtype=np.float32)
-y_val = np.zeros((val_target), dtype=float32)
+y_val = np.zeros((val_target, 4), dtype=np.float32)
 val_counter = 0
 
 X_test = np.zeros((test_target, 100, 150), dtype=np.float32)
-y_test = np.zeros((test_target), dtype=float32)
+y_test = np.zeros((test_target, 4), dtype=np.float32)
 test_counter = 0
 
 t0 = time.time()
@@ -166,16 +166,16 @@ X_test -= .5
 print 'memory usage', (X_train.nbytes + X_val.nbytes + X_test.nbytes + y_train.nbytes + y_val.nbytes + y_test.nbytes) / 1000000., 'MB'
 
 feature_time = 0
-if CLASSIFIER = 'VGG19' or CLASSIFIER == 'XCEPTION':
+if CLASSIFIER == 'VGG19' or CLASSIFIER == 'XCEPTION':
 	X_train_3D = np.stack((X_train,)*3, -1)
   	X_val_3D = np.stack((X_val,)*3, -1)
   	X_test_3D = np.stack((X_test,)*3, -1)
 
   	#if this gives me some errors: transpose (0, 3, 1, 2) and put the 3 in front on the VGG19 thing
   	if CLASSIFIER == 'VGG19':
-  		feature_generator = keras.applications.VGG19(include_top=False, weights=None, input_shape=(100,150,3))
+  		feature_generator = applications.VGG19(include_top=False, weights=None, input_shape=(100,150,3))
   	elif CLASSIFIER == 'XCEPTION':
-  		feature_generator = keras.applications.Xception(include_top=False, weights=None, input_shape=(100,150,3))
+  		feature_generator = applications.Xception(include_top=False, weights=None, input_shape=(100,150,3))
   	
   	t0 = time.time()
   	X_train_3D_features = feature_generator.predict(X_train_3D, verbose=True)
@@ -195,7 +195,7 @@ if CLASSIFIER = 'VGG19' or CLASSIFIER == 'XCEPTION':
 
   	MLP = models.Sequential()
 
- elif CLASSIFIER == 'LeNet':
+elif CLASSIFIER == 'LeNet':
 	classifier = models.Sequential()
 	classifier.add(layers.Convolution2D(20, (5, 5), padding="same", input_shape=(100, 100, 1)))
 	classifier.add(layers.Activation("relu"))
@@ -226,14 +226,14 @@ elif CLASSIFIER == 'MLP':
 
 MLP.add(layers.Dense(256, activation='relu', input_dim=feature_shape))
 MLP.add(layers.Dropout(0.5))
-MLP.add(layers.Dense(1, activation='linear')) # this gave me an error last time, keep?
+MLP.add(layers.Dense(4, activation='linear')) # this gave me an error last time, keep?
 
 sgd = optimizers.SGD(lr=0.0001, decay=1e-6, momentum=0.9, nesterov=True)
 MLP.compile(loss='mean_squared_error', optimizer=sgd, metrics=['mse', 'mae']) # MSE for regression
 
 t0 = time.time()
-callbacks = [keras.callbacks.EarlyStopping(monitor='val_loss', min_delta=0, patience=10, verbose=0, mode='auto'), \
-             keras.callbacks.ModelCheckpoint(MODELFILE, monitor='val_loss', verbose=1, save_best_only=True, mode='min')]
+callbacks = [callbacks.EarlyStopping(monitor='val_loss', min_delta=0, patience=10, verbose=0, mode='auto'), \
+             callbacks.ModelCheckpoint(MODELFILE, monitor='val_loss', verbose=1, save_best_only=True, mode='min')]
 
 history = MLP.fit(X_train, \
                   y_train, \

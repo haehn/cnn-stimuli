@@ -36,7 +36,7 @@ class Figure5:
             R = Figure5.POS_RANGE[1] - Figure5.POS_RANGE[0] + 1
         return R 
 
-    @staticmethod
+    @staticmethod #for run_regression_isvetkey.py
     def _min(stimulus):
         if stimulus is Figure5.length:
             return Figure5.LENGTH_MIN
@@ -44,13 +44,13 @@ class Figure5:
             return Figure5.POS_RANGE[0]
         return 1
 
-    @staticmethod
+    @staticmethod #for run_regression_isvetkey.py
     def _max(stimulus):
         if stimulus is Figure5.length:
             return Figure5.LENGTH_MAX
         elif stimulus is Figure5.position_non_aligned_scale or stimulus is Figure5.position_common_scale:
             return Figure5.POS_RANGE[1]
-        return calc_ranges(stimulus)
+        return Figure5.calc_ranges(stimulus)
 
 
     @staticmethod #Driver method
@@ -87,8 +87,7 @@ class Figure5:
                     SL = i
             if SL > 0:
                 sizes[0], sizes[SL] = sizes[SL], sizes[0]
-        else:
-            parameters *= 4
+            parameters = parameters / 4
 
         if stimulus is Figure5.position_non_aligned_scale:
             diff = np.random.randint(-9, 11)
@@ -124,6 +123,8 @@ class Figure5:
             label_.append(temp[2])
             if len(temp) > 3:
                 parameters *= temp[3]
+            #if parameters was an odd number (like 61^4) divided by 4, make it whole
+            parameters = int(parameters)
         return sparse_, img, label_, parameters
     
 
