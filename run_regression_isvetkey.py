@@ -137,7 +137,6 @@ while train_counter < train_target or val_counter < val_target or test_counter <
 		y_test[test_counter] = label
 		test_set.add(tuple(np.sort(label)))
 		test_counter += 1
-	print train_counter, val_counter, test_counter
 
 print 'Done', time.time()-t0, 'seconds (', all_counter, 'iterations)'
 #
