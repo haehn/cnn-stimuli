@@ -98,7 +98,7 @@ while train_counter < train_target or val_counter < val_target or test_counter <
 
 	image = image.astype(np.float32)
 
-	pot = np.random.choice(3)
+	pot = np.random.choice(3, p=[0.6, 0.2, 0.2])
 
 	if pot == 0 and train_counter < train_target:
 		#sort it to check whether same angles are in a different order somewhere
