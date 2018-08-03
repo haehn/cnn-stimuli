@@ -65,9 +65,9 @@ if os.path.exists(STATSFILE) and os.path.exists(MODELFILE):
 #
 #
 
-train_target = 600
-val_target = 200
-test_target = 200
+train_target = 60000
+val_target = 20000
+test_target = 20000
 
 global_min = s.Figure5._min(DATATYPE)
 global_max = s.Figure5._max(DATATYPE)
