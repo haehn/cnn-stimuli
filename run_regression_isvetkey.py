@@ -84,6 +84,10 @@ X_test = np.zeros((test_target, 100, 150), dtype=np.float32)
 y_test = np.zeros((test_target, 4), dtype=np.float32)
 test_counter = 0
 
+train_set = set()
+val_set = set()
+test_set = set()
+
 t0 = time.time()
 
 all_counter = 0
@@ -98,7 +102,7 @@ while train_counter < train_target or val_counter < val_target or test_counter <
 
 	if pot == 0 and train_counter < train_target:
 		#sort it to check whether same angles are in a different order somewhere
-		if np.sort(label) in np.sort(y_val, axis=1) or np.sort(label) in np.sort(y_test, axis=1):
+		if tuple(np.sort(label)) in val_set or tuple(np.sort(label)) in test_set:
 			continue
 		#add noise?
 		if NOISE:
@@ -106,11 +110,12 @@ while train_counter < train_target or val_counter < val_target or test_counter <
 
 		X_train[train_counter] = image
 		y_train[train_counter] = label
+		train_set.add(tuple(np.sort(label)))
 		train_counter += 1
 
 	#repeat process with other 2 sets of data
 	elif pot == 1 and val_counter < val_target:
-		if np.sort(label) in np.sort(y_train, axis=1) or np.sort(label) in np.sort(y_test, axis=1):
+		if tuple(np.sort(label)) in train_set or tuple(np.sort(label)) in test_set:
 			continue
 
 		if NOISE:
@@ -118,10 +123,11 @@ while train_counter < train_target or val_counter < val_target or test_counter <
 
 		X_val[val_counter] = image
 		y_val[val_counter] = label
+		val_set.add(tuple(np.sort(label)))
 		val_counter += 1
 
 	elif pot == 2 and test_counter < test_target:
-		if np.sort(label) in np.sort(y_train, axis=1) or np.sort(label) in np.sort(y_val, axis=1):
+		if tuple(np.sort(label)) in train_set or tuple(np.sort(label)) in val_set:
 			continue
 
 		if NOISE:
@@ -129,7 +135,9 @@ while train_counter < train_target or val_counter < val_target or test_counter <
 
 		X_test[test_counter] = image
 		y_test[test_counter] = label
+		test_set.add(tuple(np.sort(label)))
 		test_counter += 1
+	print train_counter, val_counter, test_counter
 
 print 'Done', time.time()-t0, 'seconds (', all_counter, 'iterations)'
 #
