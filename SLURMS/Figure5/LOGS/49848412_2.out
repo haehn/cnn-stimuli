@@ -1,0 +1,195 @@
+My SLURM_ARRAY_TASK_ID:  2
+Running s.Figure5.volume with flags 5 with VGG19
+Working in /n/home05/isvetkey/cnn-stimuli/RESULTS/s.Figure5.volume/5/VGG19
+Storing /n/home05/isvetkey/cnn-stimuli/RESULTS/s.Figure5.volume/5/VGG19.p
+Storing /n/home05/isvetkey/cnn-stimuli/RESULTS/s.Figure5.volume/5/VGG19.h5
+Done 144.650228024 seconds ( 309957 iterations)
+memory usage 60.016 MB
+
+ 32/600 [>.............................] - ETA: 38s
+ 64/600 [==>...........................] - ETA: 18s
+ 96/600 [===>..........................] - ETA: 11s
+128/600 [=====>........................] - ETA: 8s 
+160/600 [=======>......................] - ETA: 6s
+192/600 [========>.....................] - ETA: 5s
+224/600 [==========>...................] - ETA: 4s
+256/600 [===========>..................] - ETA: 3s
+288/600 [=============>................] - ETA: 2s
+320/600 [===============>..............] - ETA: 2s
+352/600 [================>.............] - ETA: 1s
+384/600 [==================>...........] - ETA: 1s
+416/600 [===================>..........] - ETA: 1s
+448/600 [=====================>........] - ETA: 0s
+480/600 [=======================>......] - ETA: 0s
+512/600 [========================>.....] - ETA: 0s
+544/600 [==========================>...] - ETA: 0s
+576/600 [===========================>..] - ETA: 0s
+600/600 [==============================] - 4s 6ms/step
+
+ 32/200 [===>..........................] - ETA: 0s
+ 64/200 [========>.....................] - ETA: 0s
+ 96/200 [=============>................] - ETA: 0s
+128/200 [==================>...........] - ETA: 0s
+160/200 [=======================>......] - ETA: 0s
+192/200 [===========================>..] - ETA: 0s
+200/200 [==============================] - 1s 3ms/step
+
+ 32/200 [===>..........................] - ETA: 0s
+ 64/200 [========>.....................] - ETA: 0s
+ 96/200 [=============>................] - ETA: 0s
+128/200 [==================>...........] - ETA: 0s
+160/200 [=======================>......] - ETA: 0s
+192/200 [===========================>..] - ETA: 0s
+200/200 [==============================] - 0s 2ms/step
+VGG19 features done after 4.43046593666
+memory usage 24.576 MB
+Train on 600 samples, validate on 200 samples
+Epoch 1/1000
+
+ 32/600 [>.............................] - ETA: 5s - loss: 0.5097 - mean_squared_error: 0.5097 - mean_absolute_error: 0.5663
+416/600 [===================>..........] - ETA: 0s - loss: 0.5273 - mean_squared_error: 0.5273 - mean_absolute_error: 0.5853
+Epoch 00001: val_loss improved from inf to 0.01186, saving model to /n/home05/isvetkey/cnn-stimuli/RESULTS/s.Figure5.volume/5/VGG19.h5
+
+600/600 [==============================] - 0s 801us/step - loss: 0.5215 - mean_squared_error: 0.5215 - mean_absolute_error: 0.5803 - val_loss: 0.0119 - val_mean_squared_error: 0.0119 - val_mean_absolute_error: 0.0568
+Epoch 2/1000
+
+ 32/600 [>.............................] - ETA: 0s - loss: 0.5053 - mean_squared_error: 0.5053 - mean_absolute_error: 0.5644
+288/600 [=============>................] - ETA: 0s - loss: 0.5069 - mean_squared_error: 0.5069 - mean_absolute_error: 0.5665
+Epoch 00002: val_loss improved from 0.01186 to 0.01065, saving model to /n/home05/isvetkey/cnn-stimuli/RESULTS/s.Figure5.volume/5/VGG19.h5
+
+600/600 [==============================] - 0s 334us/step - loss: 0.5118 - mean_squared_error: 0.5118 - mean_absolute_error: 0.5734 - val_loss: 0.0106 - val_mean_squared_error: 0.0106 - val_mean_absolute_error: 0.0557
+Epoch 3/1000
+
+ 32/600 [>.............................] - ETA: 0s - loss: 0.4820 - mean_squared_error: 0.4820 - mean_absolute_error: 0.5432
+384/600 [==================>...........] - ETA: 0s - loss: 0.5051 - mean_squared_error: 0.5051 - mean_absolute_error: 0.5687
+Epoch 00003: val_loss improved from 0.01065 to 0.00955, saving model to /n/home05/isvetkey/cnn-stimuli/RESULTS/s.Figure5.volume/5/VGG19.h5
+
+600/600 [==============================] - 0s 302us/step - loss: 0.5013 - mean_squared_error: 0.5013 - mean_absolute_error: 0.5656 - val_loss: 0.0095 - val_mean_squared_error: 0.0095 - val_mean_absolute_error: 0.0560
+Epoch 4/1000
+
+ 32/600 [>.............................] - ETA: 0s - loss: 0.5060 - mean_squared_error: 0.5060 - mean_absolute_error: 0.5674
+384/600 [==================>...........] - ETA: 0s - loss: 0.4890 - mean_squared_error: 0.4890 - mean_absolute_error: 0.5557
+Epoch 00004: val_loss improved from 0.00955 to 0.00860, saving model to /n/home05/isvetkey/cnn-stimuli/RESULTS/s.Figure5.volume/5/VGG19.h5
+
+600/600 [==============================] - 0s 299us/step - loss: 0.4907 - mean_squared_error: 0.4907 - mean_absolute_error: 0.5577 - val_loss: 0.0086 - val_mean_squared_error: 0.0086 - val_mean_absolute_error: 0.0570
+Epoch 5/1000
+
+ 32/600 [>.............................] - ETA: 0s - loss: 0.4668 - mean_squared_error: 0.4668 - mean_absolute_error: 0.5389
+256/600 [===========>..................] - ETA: 0s - loss: 0.4837 - mean_squared_error: 0.4837 - mean_absolute_error: 0.5516
+544/600 [==========================>...] - ETA: 0s - loss: 0.4808 - mean_squared_error: 0.4808 - mean_absolute_error: 0.5505
+Epoch 00005: val_loss improved from 0.00860 to 0.00782, saving model to /n/home05/isvetkey/cnn-stimuli/RESULTS/s.Figure5.volume/5/VGG19.h5
+
+600/600 [==============================] - 0s 332us/step - loss: 0.4806 - mean_squared_error: 0.4806 - mean_absolute_error: 0.5502 - val_loss: 0.0078 - val_mean_squared_error: 0.0078 - val_mean_absolute_error: 0.0580
+Epoch 6/1000
+
+ 32/600 [>.............................] - ETA: 0s - loss: 0.4921 - mean_squared_error: 0.4921 - mean_absolute_error: 0.5604
+384/600 [==================>...........] - ETA: 0s - loss: 0.4618 - mean_squared_error: 0.4618 - mean_absolute_error: 0.5340
+Epoch 00006: val_loss improved from 0.00782 to 0.00718, saving model to /n/home05/isvetkey/cnn-stimuli/RESULTS/s.Figure5.volume/5/VGG19.h5
+
+600/600 [==============================] - 0s 279us/step - loss: 0.4706 - mean_squared_error: 0.4706 - mean_absolute_error: 0.5434 - val_loss: 0.0072 - val_mean_squared_error: 0.0072 - val_mean_absolute_error: 0.0590
+Epoch 7/1000
+
+ 32/600 [>.............................] - ETA: 0s - loss: 0.4838 - mean_squared_error: 0.4838 - mean_absolute_error: 0.5567
+288/600 [=============>................] - ETA: 0s - loss: 0.4664 - mean_squared_error: 0.4664 - mean_absolute_error: 0.5431
+Epoch 00007: val_loss improved from 0.00718 to 0.00670, saving model to /n/home05/isvetkey/cnn-stimuli/RESULTS/s.Figure5.volume/5/VGG19.h5
+
+600/600 [==============================] - 0s 320us/step - loss: 0.4612 - mean_squared_error: 0.4612 - mean_absolute_error: 0.5378 - val_loss: 0.0067 - val_mean_squared_error: 0.0067 - val_mean_absolute_error: 0.0599
+Epoch 8/1000
+
+ 32/600 [>.............................] - ETA: 0s - loss: 0.4755 - mean_squared_error: 0.4755 - mean_absolute_error: 0.5490
+288/600 [=============>................] - ETA: 0s - loss: 0.4470 - mean_squared_error: 0.4470 - mean_absolute_error: 0.5253
+Epoch 00008: val_loss improved from 0.00670 to 0.00635, saving model to /n/home05/isvetkey/cnn-stimuli/RESULTS/s.Figure5.volume/5/VGG19.h5
+
+600/600 [==============================] - 0s 329us/step - loss: 0.4514 - mean_squared_error: 0.4514 - mean_absolute_error: 0.5323 - val_loss: 0.0063 - val_mean_squared_error: 0.0063 - val_mean_absolute_error: 0.0615
+Epoch 9/1000
+
+ 32/600 [>.............................] - ETA: 0s - loss: 0.4482 - mean_squared_error: 0.4482 - mean_absolute_error: 0.5303
+288/600 [=============>................] - ETA: 0s - loss: 0.4416 - mean_squared_error: 0.4416 - mean_absolute_error: 0.5229
+576/600 [===========================>..] - ETA: 0s - loss: 0.4438 - mean_squared_error: 0.4438 - mean_absolute_error: 0.5284
+Epoch 00009: val_loss improved from 0.00635 to 0.00613, saving model to /n/home05/isvetkey/cnn-stimuli/RESULTS/s.Figure5.volume/5/VGG19.h5
+
+600/600 [==============================] - 0s 351us/step - loss: 0.4424 - mean_squared_error: 0.4424 - mean_absolute_error: 0.5270 - val_loss: 0.0061 - val_mean_squared_error: 0.0061 - val_mean_absolute_error: 0.0636
+Epoch 10/1000
+
+ 32/600 [>.............................] - ETA: 0s - loss: 0.4445 - mean_squared_error: 0.4445 - mean_absolute_error: 0.5286
+224/600 [==========>...................] - ETA: 0s - loss: 0.4269 - mean_squared_error: 0.4269 - mean_absolute_error: 0.5154
+480/600 [=======================>......] - ETA: 0s - loss: 0.4340 - mean_squared_error: 0.4340 - mean_absolute_error: 0.5220
+Epoch 00010: val_loss improved from 0.00613 to 0.00605, saving model to /n/home05/isvetkey/cnn-stimuli/RESULTS/s.Figure5.volume/5/VGG19.h5
+
+600/600 [==============================] - 0s 359us/step - loss: 0.4331 - mean_squared_error: 0.4331 - mean_absolute_error: 0.5221 - val_loss: 0.0060 - val_mean_squared_error: 0.0060 - val_mean_absolute_error: 0.0657
+Epoch 11/1000
+
+ 32/600 [>.............................] - ETA: 0s - loss: 0.3807 - mean_squared_error: 0.3807 - mean_absolute_error: 0.4688
+320/600 [===============>..............] - ETA: 0s - loss: 0.4244 - mean_squared_error: 0.4244 - mean_absolute_error: 0.5151
+Epoch 00011: val_loss did not improve
+
+600/600 [==============================] - 0s 204us/step - loss: 0.4245 - mean_squared_error: 0.4245 - mean_absolute_error: 0.5172 - val_loss: 0.0061 - val_mean_squared_error: 0.0061 - val_mean_absolute_error: 0.0678
+Epoch 12/1000
+
+ 32/600 [>.............................] - ETA: 0s - loss: 0.4635 - mean_squared_error: 0.4635 - mean_absolute_error: 0.5614
+320/600 [===============>..............] - ETA: 0s - loss: 0.4188 - mean_squared_error: 0.4188 - mean_absolute_error: 0.5149
+Epoch 00012: val_loss did not improve
+
+600/600 [==============================] - 0s 201us/step - loss: 0.4164 - mean_squared_error: 0.4164 - mean_absolute_error: 0.5133 - val_loss: 0.0062 - val_mean_squared_error: 0.0062 - val_mean_absolute_error: 0.0703
+Epoch 13/1000
+
+ 32/600 [>.............................] - ETA: 0s - loss: 0.4885 - mean_squared_error: 0.4885 - mean_absolute_error: 0.6025
+320/600 [===============>..............] - ETA: 0s - loss: 0.4106 - mean_squared_error: 0.4106 - mean_absolute_error: 0.5107
+Epoch 00013: val_loss did not improve
+
+600/600 [==============================] - 0s 200us/step - loss: 0.4081 - mean_squared_error: 0.4081 - mean_absolute_error: 0.5089 - val_loss: 0.0065 - val_mean_squared_error: 0.0065 - val_mean_absolute_error: 0.0735
+Epoch 14/1000
+
+ 32/600 [>.............................] - ETA: 0s - loss: 0.3677 - mean_squared_error: 0.3677 - mean_absolute_error: 0.4661
+320/600 [===============>..............] - ETA: 0s - loss: 0.4006 - mean_squared_error: 0.4006 - mean_absolute_error: 0.5044
+Epoch 00014: val_loss did not improve
+
+600/600 [==============================] - 0s 201us/step - loss: 0.4002 - mean_squared_error: 0.4002 - mean_absolute_error: 0.5050 - val_loss: 0.0069 - val_mean_squared_error: 0.0069 - val_mean_absolute_error: 0.0768
+Epoch 15/1000
+
+ 32/600 [>.............................] - ETA: 0s - loss: 0.4015 - mean_squared_error: 0.4015 - mean_absolute_error: 0.5126
+320/600 [===============>..............] - ETA: 0s - loss: 0.3935 - mean_squared_error: 0.3935 - mean_absolute_error: 0.5021
+Epoch 00015: val_loss did not improve
+
+600/600 [==============================] - 0s 201us/step - loss: 0.3925 - mean_squared_error: 0.3925 - mean_absolute_error: 0.5016 - val_loss: 0.0074 - val_mean_squared_error: 0.0074 - val_mean_absolute_error: 0.0800
+Epoch 16/1000
+
+ 32/600 [>.............................] - ETA: 0s - loss: 0.3864 - mean_squared_error: 0.3864 - mean_absolute_error: 0.4997
+352/600 [================>.............] - ETA: 0s - loss: 0.3834 - mean_squared_error: 0.3834 - mean_absolute_error: 0.4958
+Epoch 00016: val_loss did not improve
+
+600/600 [==============================] - 0s 174us/step - loss: 0.3849 - mean_squared_error: 0.3849 - mean_absolute_error: 0.4978 - val_loss: 0.0080 - val_mean_squared_error: 0.0080 - val_mean_absolute_error: 0.0831
+Epoch 17/1000
+
+ 32/600 [>.............................] - ETA: 0s - loss: 0.4041 - mean_squared_error: 0.4041 - mean_absolute_error: 0.5333
+416/600 [===================>..........] - ETA: 0s - loss: 0.3785 - mean_squared_error: 0.3785 - mean_absolute_error: 0.4937
+Epoch 00017: val_loss did not improve
+
+600/600 [==============================] - 0s 156us/step - loss: 0.3777 - mean_squared_error: 0.3777 - mean_absolute_error: 0.4941 - val_loss: 0.0087 - val_mean_squared_error: 0.0087 - val_mean_absolute_error: 0.0862
+Epoch 18/1000
+
+ 32/600 [>.............................] - ETA: 0s - loss: 0.3983 - mean_squared_error: 0.3983 - mean_absolute_error: 0.5179
+384/600 [==================>...........] - ETA: 0s - loss: 0.3709 - mean_squared_error: 0.3709 - mean_absolute_error: 0.4902
+Epoch 00018: val_loss did not improve
+
+600/600 [==============================] - 0s 159us/step - loss: 0.3701 - mean_squared_error: 0.3701 - mean_absolute_error: 0.4901 - val_loss: 0.0095 - val_mean_squared_error: 0.0095 - val_mean_absolute_error: 0.0893
+Epoch 19/1000
+
+ 32/600 [>.............................] - ETA: 0s - loss: 0.3632 - mean_squared_error: 0.3632 - mean_absolute_error: 0.4810
+384/600 [==================>...........] - ETA: 0s - loss: 0.3590 - mean_squared_error: 0.3590 - mean_absolute_error: 0.4811
+Epoch 00019: val_loss did not improve
+
+600/600 [==============================] - 0s 159us/step - loss: 0.3635 - mean_squared_error: 0.3635 - mean_absolute_error: 0.4872 - val_loss: 0.0104 - val_mean_squared_error: 0.0104 - val_mean_absolute_error: 0.0934
+Epoch 20/1000
+
+ 32/600 [>.............................] - ETA: 0s - loss: 0.3806 - mean_squared_error: 0.3806 - mean_absolute_error: 0.5057
+416/600 [===================>..........] - ETA: 0s - loss: 0.3564 - mean_squared_error: 0.3564 - mean_absolute_error: 0.4826
+Epoch 00020: val_loss did not improve
+
+600/600 [==============================] - 0s 159us/step - loss: 0.3563 - mean_squared_error: 0.3563 - mean_absolute_error: 0.4836 - val_loss: 0.0113 - val_mean_squared_error: 0.0113 - val_mean_absolute_error: 0.0978
+Fitting done 3.42370891571
+MLAE 4.5364291255
+Written /n/home05/isvetkey/cnn-stimuli/RESULTS/s.Figure5.volume/5/VGG19.p
+Written /n/home05/isvetkey/cnn-stimuli/RESULTS/s.Figure5.volume/5/VGG19.h5
+All done. Give your computer a pat on the back.
+actually don't do that.

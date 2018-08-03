@@ -1,0 +1,32 @@
+Using TensorFlow backend.
+2018-08-02 11:39:27.065156: I tensorflow/core/platform/cpu_feature_guard.cc:137] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 FMA
+2018-08-02 11:39:27.690752: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1030] Found device 0 with properties: 
+name: GeForce GTX TITAN X major: 5 minor: 2 memoryClockRate(GHz): 1.076
+pciBusID: 0000:85:00.0
+totalMemory: 11.93GiB freeMemory: 11.81GiB
+2018-08-02 11:39:27.690785: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1120] Creating TensorFlow device (/device:GPU:0) -> (device: 0, name: GeForce GTX TITAN X, pci bus id: 0000:85:00.0, compute capability: 5.2)
+Traceback (most recent call last):
+  File "run_regression_isvetkey.py", line 244, in <module>
+    verbose=True)
+  File "/n/home05/isvetkey/.conda/envs/CP1/lib/python2.7/site-packages/keras/models.py", line 965, in fit
+    validation_steps=validation_steps)
+  File "/n/home05/isvetkey/.conda/envs/CP1/lib/python2.7/site-packages/keras/engine/training.py", line 1669, in fit
+    validation_steps=validation_steps)
+  File "/n/home05/isvetkey/.conda/envs/CP1/lib/python2.7/site-packages/keras/engine/training.py", line 1226, in _fit_loop
+    callbacks.on_epoch_end(epoch, epoch_logs)
+  File "/n/home05/isvetkey/.conda/envs/CP1/lib/python2.7/site-packages/keras/callbacks.py", line 76, in on_epoch_end
+    callback.on_epoch_end(epoch, logs)
+  File "/n/home05/isvetkey/.conda/envs/CP1/lib/python2.7/site-packages/keras/callbacks.py", line 418, in on_epoch_end
+    self.model.save(filepath, overwrite=True)
+  File "/n/home05/isvetkey/.conda/envs/CP1/lib/python2.7/site-packages/keras/engine/topology.py", line 2573, in save
+    save_model(self, filepath, overwrite, include_optimizer)
+  File "/n/home05/isvetkey/.conda/envs/CP1/lib/python2.7/site-packages/keras/models.py", line 106, in save_model
+    with h5py.File(filepath, mode='w') as f:
+  File "/n/home05/isvetkey/.conda/envs/CP1/lib/python2.7/site-packages/h5py/_hl/files.py", line 271, in __init__
+    fid = make_fid(name, mode, userblock_size, fapl, swmr=swmr)
+  File "/n/home05/isvetkey/.conda/envs/CP1/lib/python2.7/site-packages/h5py/_hl/files.py", line 107, in make_fid
+    fid = h5f.create(name, h5f.ACC_TRUNC, fapl=fapl, fcpl=fcpl)
+  File "h5py/_objects.pyx", line 54, in h5py._objects.with_phil.wrapper
+  File "h5py/_objects.pyx", line 55, in h5py._objects.with_phil.wrapper
+  File "h5py/h5f.pyx", line 98, in h5py.h5f.create
+IOError: Unable to create file (Unable to lock file, errno = 11, error message = 'resource temporarily unavailable')
