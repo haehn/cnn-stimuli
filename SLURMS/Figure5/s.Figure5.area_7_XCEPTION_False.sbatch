@@ -4,7 +4,7 @@
 #SBATCH -N 1 # Ensure that all cores are on one machine
 #SBATCH --gres=gpu
 #SBATCH --array=1-4
-#SBATCH --mem=32000
+#SBATCH --mem=100000
 #SBATCH -t 3-00:00
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ian.svetkey@gmail.com
