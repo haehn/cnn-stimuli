@@ -13,8 +13,9 @@ EXPERIMENT = sys.argv[1]
 DATASET = int(sys.argv[2]) #true flags (encoded in binary)
 CLASSIFIER = sys.argv[3]
 NOISE = sys.argv[4]
+JOB_ID = sys.argv[5]
 
-print 'Running', EXPERIMENT, 'with flags', DATASET, 'with', CLASSIFIER
+print 'Running', EXPERIMENT, 'with flags', DATASET, 'with', CLASSIFIER, 'job ID', JOB_ID
 
 DATATYPE = eval(EXPERIMENT)
 
@@ -41,15 +42,15 @@ else:
 
 PREFIX = '/n/home05/isvetkey/cnn-stimuli/'
 RESULTS_DIR = PREFIX + 'RESULTS/'
-OUTPUT_DIR = RESULTS_DIR + EXPERIMENT + '/' + str(DATASET) + '/' + CLASSIFIER
+OUTPUT_DIR = RESULTS_DIR + EXPERIMENT + '/' + str(DATASET) + '/' + CLASSIFIER + '/'
 if not os.path.exists(OUTPUT_DIR):
 	try:
 		os.makedirs(OUTPUT_DIR)
 	except:
-		print 'Race condition, what are you?', os.path.exists(OUTPUT_DIR)
+		print 'Race condition', os.path.exists(OUTPUT_DIR)
 
-STATSFILE = OUTPUT_DIR + SUFFIX + 'p' #job index?
-MODELFILE = OUTPUT_DIR + SUFFIX + 'h5'
+STATSFILE = OUTPUT_DIR + JOB_ID + SUFFIX + 'p'
+MODELFILE = OUTPUT_DIR + JOB_ID + SUFFIX + 'h5'
 
 print 'Working in', OUTPUT_DIR
 print 'Storing', STATSFILE
@@ -239,7 +240,7 @@ sgd = optimizers.SGD(lr=0.0001, decay=1e-6, momentum=0.9, nesterov=True)
 MLP.compile(loss='mean_squared_error', optimizer=sgd, metrics=['mse', 'mae']) # MSE for regression
 
 t0 = time.time()
-callbacks = [callbacks.EarlyStopping(monitor='val_loss', min_delta=0, patience=10, verbose=0, mode='auto'), \
+callbacks = [callbacks.EarlyStopping(monitor='val_loss', min_delta=0, patience=20, verbose=0, mode='auto'), \
              callbacks.ModelCheckpoint(MODELFILE, monitor='val_loss', verbose=1, save_best_only=True, mode='min')]
 
 history = MLP.fit(X_train, \
