@@ -1,0 +1,2 @@
+Using TensorFlow backend.
+slurmstepd: error: *** JOB 50326227 ON coxgpu03 CANCELLED AT 2018-08-08T09:25:12 ***
