@@ -1,17 +1,17 @@
-Hey! This is a README for this project.
-Breaking the fourth wall, I guess.
-Or the fourth stimulus.
-Get it?
+Hey! This is the source code for my experiments with four stimuli and neural networks.
 
-Anyway, this project is my attempt to run a bunch of experiments on a cluster that's not mine (don't worry, I was given permission) and see if a computer knows how to classify a bunch of angles, lengths, positions and other things. Human or computer: the age-old question.
-In serious terms, this is replicating the experiments of Cleveland (not Grover) and McGill's 1985 paper entitled "Graphical Perception and Graphical Methods for Analyzing Scientific Data."
+This project is the code and results behind a bunch of experiments that were run on a cluster and aimed to see whether a computer knows how to classify a bunch of angles, lengths, positions and other things, and determine how it performed relative to humans.
 
-Four stimuli.
-One neural network.
-Who will win?
-Look in SLURMS/Figure5/LOGS/ to find out.
+This project replicates the experiments of Cleveland and McGill's 1985 paper entitled "Graphical Perception and Graphical Methods for Analyzing Scientific Data," except substituting convolutional neural networks for the human subjects.
 
-Want to know what the stimuli look like (it's not that impressive)... ? Look in Figure5.ipynb.
+Look in SLURMS/Figure5/LOGS/ to find the raw test outputs.
+Look in RESULTS/ to find the raw network files.
+Look in results.ipynb to see a few pretty graphs of all of the data.
+
+Want to know what the stimuli look like on their own? Look in Figure5.ipynb.
 Want to see a cute dog with a cool filter on it? Look in SOBEL DEMO.
+Want to see the same network try to classify digits? Look in MNIST.
+
+Have a look, enjoy...
 
 -Ian Svetkey (@isvetkey)
